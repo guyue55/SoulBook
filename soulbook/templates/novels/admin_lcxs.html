@@ -1,0 +1,40 @@
+{% extends "main.html" %}
+
+{% block header %}
+<title>关注 - 公众号</title>
+<link rel="stylesheet" href="static/novels/css/result.css">
+{% endblock %}
+
+{% block content %}
+{% include "search_bar.html" %}
+<div class="container">
+    <h3>公众号 - xxxx</h3>
+    <table class="table table-striped table-hover" style="margin-bottom: 50px;">
+        <thead>
+        <tr align="center">
+            <th>#</th>
+            <th>名称</th>
+            <th>日期</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>
+                <a href="https://mp.weixin.qq.com/s/XEh3LI7GDoquA0finxPABw">【福利】在微信群里面查找&追更小说 -
+                    左下角扫一扫关注</a>
+            </td>
+            <td>2019-11-05</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>
+                <a href="https://lcxs.owllook.net/book_list/">书单推荐</a>
+            </td>
+            <td>2019-11-05</td>
+        </tr>
+        </tbody>
+    </table>
+    {% include "lcxs_show.html" %}
+</div>
+{% endblock %}

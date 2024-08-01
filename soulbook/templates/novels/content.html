@@ -1,0 +1,143 @@
+{% extends "main.html" %}
+
+{% block header %}
+<title>{{ name }} - SoulBook</title>
+<link rel="stylesheet" href="static/novels/css/content.css">
+<!--<link rel="stylesheet" data-ignore="true" href="https://qidian.gtimg.com/c/=/qd/css/lbfUI/css/icon.a578d.css,/qd/css/lbfUI/css/Drag.41d31.css,/qd/css/lbfUI/css/Checkbox.ef549.css,/qd/css/reset.ddecf.css,/qd/css/global.d41d8.css,/qd/css/font.87b18.css,/qd/css/module.b14a3.css,/qd/css/footer.cdb97.css,/qd/css/read.3186c.css,/qd/css/weekly_hot_rec.4aed7.css,/qd/css/review.01677.css,/qd/css/emoji.3b60e.css,/qd/css/layout.2aada.css,/qd/css/qd_popup.ed72c.css,/qd/css/book_popup.b4f13.css,/qd/css/vote_popup.3f2e7.css,/qd/css/subscribe_protect_dialog.1af9c.css">-->
+<style>
+    #yun-tie-sdk-wrap {
+        background-color: #f8f3e9 !important;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default nav-search">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+            </a>
+        </div>
+        <form action="/search" method="get">
+            <div class="col-xs-3 search">
+                <input type="text" name="wd" placeholder="search" value="">
+            </div>
+        </form>
+        {% if is_login %}
+        <div class="header">
+            {% include "login.html" %}
+        </div>
+        {% else %}
+        <div class="login">
+            <a class="btn btn-primary pull-right" href="#" role="button" data-toggle="modal"
+               data-target="#login">登录</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container all-content">
+    <input id="content_url" type="hidden" value="{{content_url}}">
+    <input id="url" type="hidden" value="{{url}}">
+    <input id="chapter_url" type="hidden" value="{{chapter_url}}">
+    <input id="novels_name" type="hidden" value="{{novels_name}}">
+
+    <div class="title">
+        {% if bookmark %}
+        <a id="bookMark" title="书签" class="bookMarkAct"></a>
+        {% else %}
+        <a id="bookMark" title="书签" class="bookMark"></a>
+        {% endif %}
+        <div class="pre_next">
+            {% for v in next_chapter%}
+            {% if next_chapter[v] %}
+            <a href="/owllook_content?url={{next_chapter[v]}}&chapter_url={{chapter_url}}&novels_name={{novels_name}}"
+               {% else %}
+            <a href="/chapter?url={{chapter_url}}&novels_name={{novels_name}}"
+               {% endif %}
+               class="btn btn-default">
+                {{v}}
+            </a>
+
+            {% endfor %}
+        </div>
+        <h2 id="content_name">{{name}}</h2>
+    </div>
+    <div class="left-bar-list">
+        <div class="left-bar-flag">
+            <a href="/chapter?url={{chapter_url}}&novels_name={{novels_name}}">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                <div>目录</div>
+            </a>
+        </div>
+        <div class="left-bar-flag">
+            <a href="">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                <div>设置</div>
+            </a>
+        </div>
+        <div class="left-bar-flag">
+            {% if book %}
+            <a id="owllook_book" class="add-color" href="javascript:;">
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                <div>书架</div>
+            </a>
+            {% else %}
+            <a id="owllook_book" href="javascript:;">
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                <div>书架</div>
+            </a>
+            {% endif %}
+
+        </div>
+        <div class="left-bar-flag">
+            <a href="">
+                <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                <div>书单</div>
+            </a>
+        </div>
+    </div>
+    <div class="show-content">
+        {% for item in soup -%}
+        {{item|safe}}
+        {%- endfor %}
+    </div>
+    <div class="pre_next">
+        {% for v in next_chapter%}
+        {% if next_chapter[v] %}
+        <a href="/owllook_content?url={{next_chapter[v]}}&chapter_url={{chapter_url}}&novels_name={{novels_name}}"
+           {% else %}
+        <a href="/chapter?url={{chapter_url}}&novels_name={{novels_name}}"
+           {% endif %}
+           class="btn btn-default">
+            {{v}}
+        </a>
+
+        {% endfor %}
+        <!--<div class="move">-->
+        <div class="move_up">
+            <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+        </div>
+        <!--</div>-->
+    </div>
+
+    <div class="move">
+        <div class="move_up">
+            <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+        </div>
+        <div class="move_down">
+            <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+        </div>
+    </div>
+    {% include "lcxs_show.html" %}
+    <!--{% include "comment.html" %}-->
+</div>
+{% endblock %}
+{% block script %}
+<script src="static/novels/js/theme.js"></script>
+<script src="static/novels/js/content.js"></script>
+{% endblock %}
+
+

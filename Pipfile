@@ -1,0 +1,35 @@
+[[source]]
+verify_ssl = true
+name = "pypi"
+url = "https://pypi.douban.com/simple/"
+
+[requires]
+python_version = "3.6"
+
+[dev-packages]
+
+[packages]
+aiohttp = "*"
+arrow = "*"
+async_timeout = "*"
+"bs4" = "*"
+cchardet = "*"
+gunicorn = "*"
+"html5lib" = "*"
+Jinja2 = "==2.11.3"
+motor = "==1.1"
+numpy = "*"
+requests = ">=2.20.0"
+Sanic = "==0.5.1"
+sanic_session = "==0.1.2"
+schedule = "*"
+uvloop = "*"
+pytest = "*"
+pymongo = "*"
+aiofiles = "*"
+pyquery = "*"
+ruia-ua = "*"
+ruia = ">=0.5.8"
+aiocache = "==0.3.2"
+aioredis = "==0.3.3"
+asyncio_redis = "==0.14.3"
