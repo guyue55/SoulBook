@@ -17,7 +17,6 @@ class DevConfig(Config):
         REDIS_ENDPOINT=os.getenv('REDIS_ENDPOINT', "localhost"),
         REDIS_PORT=int(os.getenv('REDIS_PORT', 6379)),
         REDIS_PASSWORD=os.getenv('REDIS_PASSWORD', None),
-        REDIS_PORT=6379,
         CACHE_DB=0,
         SESSION_DB=1,
         POOLSIZE=10,
