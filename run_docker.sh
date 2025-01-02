@@ -1,0 +1,2 @@
+# sudo docker run -it -d -p 8001:8001 -e MONGO_HOST=127.0.0.1 -e MONGO_PORT=27017 -e REDIS_ENDPOINT=127.0.0.1 -e REDIS_PORT=6379 -e REDIS_PASSWORD=password guyue55/soulbook
+sudo docker run -it -d -p 8001:8001 --env-file .env guyue55/soulbook

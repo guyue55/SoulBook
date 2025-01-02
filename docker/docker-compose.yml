@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    image: guyue55/owllook
+    command: gunicorn -c soulbook/config/gunicorn.py --worker-class sanic.worker.GunicornWorker soulbook.server:app
+    ports:
+     - "8001:8001"
+    volumes:
+     - .:/app

@@ -1,0 +1,1 @@
+sudo docker build -t guyue55/soulbook . -f docker/Dockerfile-slim

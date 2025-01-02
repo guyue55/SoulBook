@@ -1,0 +1,25 @@
+# 基于python3.6镜像来构建镜像
+FROM python:3.6-alpine
+MAINTAINER guyue55 <guyuecw@qq.com>
+ENV TIME_ZONE=Asia/Shanghai
+
+# 换源
+RUN echo "https://mirrors.aliyun.com/alpine/v3.15/main" > /etc/apk/repositories \
+    && echo "https://mirrors.aliyun.com/alpine/v3.15/community" >> /etc/apk/repositories \
+    && echo "${TIME_ZONE}" > /etc/timezone \
+    && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
+
+# 安装基础库
+RUN apk --no-cache add gcc g++ libc-dev libffi-dev musl-dev cmake build-base
+
+WORKDIR /app
+COPY . .
+
+#RUN pip install --no-cache-dir --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
+RUN pip install --no-cache-dir -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
+
+RUN find . -name "*.pyc" -delete
+
+EXPOSE 8001
+
+CMD gunicorn -c soulbook/config/gunicorn.py --worker-class sanic.worker.GunicornWorker soulbook.server:app --log-level=debug
