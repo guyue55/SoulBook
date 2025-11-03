@@ -59,7 +59,13 @@ async def add_session_to_request(request):
             if not host or host not in CONFIG.HOST:
                 return redirect('http://www.owllook.net')
         if CONFIG.WEBSITE['IS_RUNNING']:
-            await app.session_interface.open(request)
+            # Gracefully handle missing Redis in dev/preview environments
+            try:
+                await app.session_interface.open(request)
+            except Exception as e:
+                LOGGER.error('Session open failed: {}'.format(e))
+                # Ensure a session dict exists even if open failed
+                request['session'] = request.get('session', {})
         else:
             return html("<h3>网站正在维护...</h3>")
     else:

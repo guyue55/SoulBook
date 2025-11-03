@@ -80,6 +80,18 @@ async def feedback(request):
     return template('feedback.html')
 
 
+@novels_bp.route("/specify_book")
+async def specify_book(request):
+    """
+    指定书籍页面：输入书籍名和目录地址，跳转到目录页加载。
+    """
+    user = request['session'].get('user', None)
+    return template('specify_book.html',
+                    title='指定书籍 - SoulBook',
+                    is_login=1 if user else 0,
+                    user=user or '')
+
+
 @novels_bp.route("/")
 async def index(request):
     user = request['session'].get('user', None)
