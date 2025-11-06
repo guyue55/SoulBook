@@ -125,6 +125,7 @@ async def bookmarks(request):
                                                                                                   '') else ''
                         item_result['bookmark'] = bookmark
                         item_result['add_time'] = i.get('add_time', '')
+                        item_result['set_date'] = i.get('set_date', '')
                         result.append(item_result)
                     return template('admin_bookmarks.html', title='{user}的书签 - SoulBook'.format(user=user),
                                     is_login=1,
@@ -174,6 +175,8 @@ async def books(request):
                             item_result['owllook_content_url'] = get_latest_data.get(
                                 'owllook_content_url', '')
                         item_result['add_time'] = i.get('add_time', '')
+                        item_result['set_time'] = i.get('set_time', 0)
+                        item_result['set_date'] = i.get('set_date', '')
                         item_result["last_read_url"] = last_read_url if last_read_url else book_url
                         item_result["last_read_chapter_name"] = last_read_chapter_name
                         result.append(item_result)

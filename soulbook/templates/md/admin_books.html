@@ -67,15 +67,19 @@
             <tbody>
             {%for item in result%}
             <tr>
-                <td><a href="/search?wd={{item.novels_name}}">[{{item.add_time}}]{{item.novels_name}}</a></td>
                 <td>
-                    <a href="{{item.book_url}}">查看{{item.novels_name}}源目录</a>
+                    <a href="/search?wd={{item.novels_name}}">{{item.novels_name}}</a>
+                    <br>{{item.add_time}}
+                </td>
+                <td>
+                    <a href="{{item.book_url}}">查看</a>
                 </td>
                 <td>
                     <a href="{{item.owllook_content_url}}">{{item.latest_chapter_name}}</a>
                 </td>
                 <td>
                     <a href="{{item.last_read_url}}">{{item.last_read_chapter_name}}</a>
+                    <br>[{{item.set_date}}]
                 </td>
                 <td class="del-book">
                     <a class="book_url" data-value="{{item.book_url}}" href="javascript:;">删除</a>
