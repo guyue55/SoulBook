@@ -6,8 +6,10 @@ os.environ['MODE'] = 'PRO'
 
 WORKERS = os.getenv('WORKERS', 5)
 TIMEOUT = os.getenv('TIMEOUT', 60)
+HOST = os.getenv('HOST', '0.0.0.0')
+PORT = os.getenv('PORT', 8001)
 
-bind = f'{os.getenv('HOST', '0.0.0.0')}:{os.getenv('PORT', 8001)}'
+bind = f'{HOST}:{PORT}'
 backlog = 2048
 
 workers = WORKERS
