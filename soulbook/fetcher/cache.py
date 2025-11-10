@@ -244,7 +244,7 @@ async def get_the_latest_chapter(chapter_url, timeout=15):
                             "latest_chapter_name": latest_chapter_name,
                             "latest_chapter_url": latest_chapter_url,
                             "owllook_chapter_url": chapter_url,
-                            "owllook_content_url": "/owllook_content?url={latest_chapter_url}&name={name}&chapter_url={chapter_url}&novels_name={novels_name}".format(
+                            "owllook_content_url": "/owllook_content?chapter_url={chapter_url}&novels_name={novels_name}&url={latest_chapter_url}&name={name}".format(
                                 latest_chapter_url=latest_chapter_url,
                                 name=latest_chapter_name,
                                 chapter_url=url,

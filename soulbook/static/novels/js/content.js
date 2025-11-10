@@ -190,14 +190,14 @@ $(document).ready(function () {
     }
 
     function load_btn_href(data) {
-        page_btn_pre.attr("href", "/owllook_content?url=" + data.pre_chapter_url + "&chapter_url=" + data.chapter_url + "&novels_name=" + data.novels_name);
-        page_btn_next.attr("href", "/owllook_content?url=" + data.next_chapter_url + "&chapter_url=" + data.chapter_url + "&novels_name=" + data.novels_name);
+        page_btn_pre.attr("href", "/owllook_content?url=" + data.pre_chapter_url + "&novels_name=" + data.novels_name + "&chapter_url=" + data.chapter_url);
+        page_btn_next.attr("href", "/owllook_content?url=" + data.next_chapter_url + "&novels_name=" + data.novels_name + "&chapter_url=" + data.chapter_url);
     }
 
     function load_location_url(data) {
         var th_url = window.location.href + "";
         var pos = th_url.indexOf("/owllook_content?");
-        var td_url = "/owllook_content?url=" + data.url + "&name=" + data.name + "&chapter_url=" + data.chapter_url + "&novels_name=" + data.novels_name;
+        var td_url = "/owllook_content?url=" + data.url + "&name=" + data.name + "&novels_name=" + data.novels_name + "&chapter_url=" + data.chapter_url;
         th_url += td_url;
         //log(th_url);
         window.history.replaceState({}, data.name + " - SoulBook", td_url);
