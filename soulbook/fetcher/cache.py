@@ -4,7 +4,6 @@
 """
 
 import re
-import aiohttp
 import async_timeout
 
 from bs4 import BeautifulSoup
@@ -19,7 +18,7 @@ from soulbook.fetcher.function import target_fetch, get_time, get_html_by_reques
 from soulbook.fetcher.extract_novels import extract_pre_next_chapter
 from soulbook.config import RULES, LATEST_RULES, LOGGER
 
-list_class_content = ("content", "content_read", "txt")
+list_class_content = ("content", "content_read", "txt", 'txtnav', 'container')
 list_id_content = ("chaptercontent", "content", "txt")
 
 
@@ -44,18 +43,6 @@ async def cache_owllook_novels_content(url, chapter_url, netloc):
             else:
                 content = soup.find_all(selector.get('tag'))
         if not content:
-            # print("novels_content: body")
-            # content = soup.find_all("body")
-
-            # for i in list_class_content:
-            #     content = soup.find_all(class_=i)
-            #     if content:
-            #         break
-            # else:
-            #     for i in list_id_content:
-            #         content = soup.find_all(id=i)
-            #         if content:
-            #             break
 
             for i in list_id_content:
                 content = soup.find_all(id=i)
@@ -143,6 +130,10 @@ async def cache_owllook_novels_chapter(url, netloc):
         if not content:
             # 直接提取整个版块块
             content = soup.find_all("body")
+            try:
+                content = content[0].find_all(class_='class="container"')
+            except Exception as e:
+                print(e)
         if content:
             # 防止章节被display:none
             return str(content).replace('style', '') if content else None
