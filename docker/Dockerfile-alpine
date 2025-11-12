@@ -18,7 +18,7 @@ COPY . .
 #RUN pip install --no-cache-dir --trusted-host mirrors.aliyun.com -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 RUN pip install --no-cache-dir -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
-RUN find . -name "*.pyc" -delete
+# RUN find . -name "*.pyc" -delete
 
 EXPOSE 8001
 
