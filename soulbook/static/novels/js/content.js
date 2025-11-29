@@ -135,7 +135,7 @@ $(document).ready(function () {
                 try {
                     load(page_btn_pre.attr("href"));
                 } catch (err) {
-                    window.location.href = page_btn_pre.attr("href");
+            window.location.href = page_btn_pre.attr("href");
                 }
 
             }
@@ -143,18 +143,9 @@ $(document).ready(function () {
         page_btn_next.unbind("click");
         page_btn_next.click(function () {
             event.preventDefault();
-            if (window.sessionStorage.getItem(page_btn_next.attr("href")) === null) {
-                //若未缓存
-                window.location.href = page_btn_next.attr("href");
-            } else {
-                try {
-                    load(page_btn_next.attr("href"));
-                } catch (err) {
-                    window.location.href = page_btn_next.attr("href");
-                }
-
-            }
-        });
+            // 直接跳转到下一章，不使用缓存，避免跳过章节
+            window.location.href = page_btn_next.attr("href");
+        }); 
     }
 
 
