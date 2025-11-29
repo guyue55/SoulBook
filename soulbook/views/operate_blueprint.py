@@ -36,7 +36,7 @@ def close_connection(operate_bp, loop):
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.operate_blueprint', '../templates/operate'),
+    loader=PackageLoader('soulbook', 'templates/operate'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 

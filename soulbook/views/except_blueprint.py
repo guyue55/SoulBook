@@ -11,7 +11,7 @@ except_bp.static('/static/except', CONFIG.BASE_DIR + '/static/except')
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.except_blueprint', '../templates/except'),
+    loader=PackageLoader('soulbook', 'templates/except'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 

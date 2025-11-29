@@ -26,7 +26,7 @@ def close_connection(rank_bp, loop):
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.md_blueprint', '../templates/md'),
+    loader=PackageLoader('soulbook', 'templates/md'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 
