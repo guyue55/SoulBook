@@ -165,7 +165,7 @@ async def cache_others_search_ranking(spider='qidian', novel_type='全部类别'
 
 async def get_the_latest_chapter(chapter_url, timeout=15):
     try:
-        with async_timeout.timeout(timeout):
+        async with async_timeout.timeout(timeout):
             url = parse_qs(urlparse(chapter_url).query).get('url', '')
             novels_name = parse_qs(urlparse(chapter_url).query).get('novels_name', '')
             data = None
