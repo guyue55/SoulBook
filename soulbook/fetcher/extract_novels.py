@@ -42,33 +42,52 @@ def extract_chapters(chapters_url, html):
 def extract_pre_next_chapter(url, chapter_url, html):
     """
     获取单章节上一页下一页
-    :param chapter_url: 
-    :param html: 
-    :return: 
+    :param chapter_url:
+    :param html:
+    :return:
     """
     next_chapter = OrderedDict()
     try:
         # 参考https://greasyfork.org/zh-CN/scripts/292-my-novel-reader
+        # 保留原有的宽泛匹配
         next_reg = r'(<a\s+.*?>.*[第上前下后][一]?[0-9]{0,6}?[页张个篇章节步].*?</a>)'
         judge_reg = r'[第上前下后][一]?[0-9]{0,6}?[页张个篇章节步]'
+        
         # 这里同样需要利用bs再次解析
         next_res = re.findall(next_reg, html.replace('<<', '').replace('>>', ''), re.I)
         str_next_res = '\n'.join(next_res)
         next_res_soup = BeautifulSoup(str_next_res, 'html5lib')
+        
         for link in next_res_soup.find_all('a'):
             text = link.text or ''
             text = text.replace(' ', '')
+            href = link.get('href') or ''
+            
             if novels_list(text):
                 is_next = re.search(judge_reg, text)
-                # is_ok = is_chapter(text)
                 if is_next:
-                    url = urljoin(chapter_url, link.get('href')) or ''
+                    url = urljoin(chapter_url, href) or ''
                     regex = re.compile("^http://|^https://")
+                    
+                    # 添加判断：排除目录链接
+                    # 1. 如果链接指向目录页（通常是小说根目录）
+                    if url.endswith('/') or url.endswith('.html') and not re.search(r'/\d+\.html$', url):
+                        continue
+                        
+                    # 2. 如果链接文本包含小说名称（通常目录链接会包含）
+                    # 从URL中提取小说名称进行比较
+                    novel_name_match = re.search(r'novels_name=([^&]+)', chapter_url)
+                    if novel_name_match:
+                        novel_name = urllib.parse.unquote(novel_name_match.group(1))
+                        if novel_name[:3] in text:  # 如果小说名称出现在链接文本中
+                            continue
+                    
+                    # 3. 如果链接指向当前页面
                     if regex.sub('', chapter_url) == regex.sub('', url):
                         url = False
+                        
                     next_chapter[text[:5]] = url
 
-        # nextDic = [{v[0]: v[1]} for v in sorted(next_chapter.items(), key=lambda d: d[1])]
         return next_chapter
     except Exception as e:
         LOGGER.exception(e)
