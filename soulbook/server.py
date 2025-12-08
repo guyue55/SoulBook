@@ -86,11 +86,14 @@ async def save_session(request, response):
     # after each request save the session,
     # pass the response to set client cookies
     # await app.session_interface.save(request, response)
-    if request.path == '/operate/login' and request['session'].get('user', None):
-        await app.session_interface.save(request, response)
-        import datetime
-        response.cookies['owl_sid']['expires'] = datetime.datetime.now(
-        ) + datetime.timedelta(days=30)
+    if request.path == '/operate/login' and request.get('session') and request['session'].get('user', None):
+        try:
+            await app.session_interface.save(request, response)
+            import datetime
+            response.cookies['owl_sid']['expires'] = datetime.datetime.now(
+            ) + datetime.timedelta(days=30)
+        except Exception as e:
+            LOGGER.error('Session save failed: {}'.format(e))
     elif request.path == '/register':
         try:
             response.cookies['reg_index'] = str(request['session']['index'][0])
