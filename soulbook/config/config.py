@@ -27,13 +27,13 @@ class Config():
     )
 
     # Engine config
-    URL_PHONE = 'https://m.baidu.com/s'
-    URL_PC = 'http://www.baidu.com/s'
+    URL_PHONE = 'https://m.baidu.com/s'  # 移动端百度搜索
+    URL_PC = 'http://www.baidu.com/s'  # 桌面端百度搜索
     # BAIDU_RN = 15
     BAIDU_RN = 15
-    SO_URL = "https://www.so.com/s"
-    BY_URL = "https://www.bing.com/search"
-    DUCKGO_URL = "https://duckduckgo.com/html"
+    SO_URL = "https://www.so.com/s"  # 360搜索
+    BY_URL = "https://www.bing.com/search"  # Bing搜索
+    DUCKGO_URL = "https://duckduckgo.com/html"  # DuckDuckGo搜索
 
     REMOTE_SERVER = {
         'proxy_server': 'http://0.0.0.0:8002/'
