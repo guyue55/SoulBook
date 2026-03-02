@@ -9,6 +9,9 @@
         background-color: #f8f3e9 !important;
         margin-top: 20px;
     }
+    /* Ensure copied external content inherits site font size */
+    .reader-content { font-size: 16px !important; }
+    .reader-content, .reader-content * { font-size: inherit !important; line-height: 1.9 !important; }
 </style>
 {% endblock %}
 
@@ -53,9 +56,9 @@
         <div class="pre_next">
             {% for v in next_chapter%}
             {% if next_chapter[v] %}
-            <a href="/owllook_content?url={{next_chapter[v]}}&chapter_url={{chapter_url}}&novels_name={{novels_name}}"
+            <a href="/owllook_content?url={{next_chapter[v]}}&novels_name={{novels_name}}&chapter_url={{chapter_url}}"
                {% else %}
-            <a href="/chapter?url={{chapter_url}}&novels_name={{novels_name}}"
+            <a href="/chapter?novels_name={{novels_name}}&url={{chapter_url}}"
                {% endif %}
                class="btn btn-default">
                 {{v}}
@@ -100,9 +103,11 @@
         </div>
     </div>
     <div class="show-content">
-        {% for item in soup -%}
-        {{item|safe}}
-        {%- endfor %}
+        <div class="reader-content">
+            {% for item in soup -%}
+            {{item|safe}}
+            {%- endfor %}
+        </div>
     </div>
     <div class="pre_next">
         {% for v in next_chapter%}

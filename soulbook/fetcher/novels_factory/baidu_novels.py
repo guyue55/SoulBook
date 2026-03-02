@@ -59,7 +59,7 @@ class BaiduNovels(BaseNovels):
         :param url:
         :return:
         """
-        with async_timeout.timeout(5):
+        async with async_timeout.timeout(5):
             try:
                 async with aiohttp.ClientSession() as client:
                     headers = {'user-agent': await get_random_user_agent()}

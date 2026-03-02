@@ -34,7 +34,7 @@ idna-ssl==1.1.0
 importlib-metadata==4.8.3
 iniconfig==1.1.1
 Jinja2==2.11.3
-lxml==4.8.0
+lxml~=4.8.0
 MarkupSafe==2.0.1
 motor==1.1
 multidict==5.2.0

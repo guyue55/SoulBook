@@ -42,33 +42,69 @@ def extract_chapters(chapters_url, html):
 def extract_pre_next_chapter(url, chapter_url, html):
     """
     获取单章节上一页下一页
-    :param chapter_url: 
-    :param html: 
-    :return: 
+    :param chapter_url:
+    :param html:
+    :return:
     """
     next_chapter = OrderedDict()
     try:
-        # 参考https://greasyfork.org/zh-CN/scripts/292-my-novel-reader
+        current_url = url
         next_reg = r'(<a\s+.*?>.*[第上前下后][一]?[0-9]{0,6}?[页张个篇章节步].*?</a>)'
         judge_reg = r'[第上前下后][一]?[0-9]{0,6}?[页张个篇章节步]'
-        # 这里同样需要利用bs再次解析
         next_res = re.findall(next_reg, html.replace('<<', '').replace('>>', ''), re.I)
         str_next_res = '\n'.join(next_res)
         next_res_soup = BeautifulSoup(str_next_res, 'html5lib')
+        prev_alias = ['上一章', '上一页', '前一章', '上页', '上一节', '上一回']
+        next_alias = ['下一章', '下一页', '后一章', '下页', '下一节', '下一回']
+
         for link in next_res_soup.find_all('a'):
             text = link.text or ''
             text = text.replace(' ', '')
+            href = link.get('href') or ''
+
             if novels_list(text):
                 is_next = re.search(judge_reg, text)
-                # is_ok = is_chapter(text)
                 if is_next:
-                    url = urljoin(chapter_url, link.get('href')) or ''
+                    if not href or href.startswith('#') or href.lower().startswith('javascript'):
+                        continue
+                    link_url = urljoin(chapter_url, href) or ''
                     regex = re.compile("^http://|^https://")
-                    if regex.sub('', chapter_url) == regex.sub('', url):
-                        url = False
-                    next_chapter[text[:5]] = url
+                    if link_url.endswith('/'):
+                        continue
+                    if link_url.endswith('.html') and not re.search(r'/\d+(?:_\d+)?\.html$', link_url):
+                        continue
+                    if regex.sub('', current_url) == regex.sub('', link_url):
+                        link_url = False
 
-        # nextDic = [{v[0]: v[1]} for v in sorted(next_chapter.items(), key=lambda d: d[1])]
+                    key = None
+                    for k in prev_alias:
+                        if k in text:
+                            key = '上一章'
+                            break
+                    if not key:
+                        for k in next_alias:
+                            if k in text:
+                                key = '下一章'
+                                break
+                    if not key:
+                        continue
+                    next_chapter[key] = link_url
+
+        if '上一章' not in next_chapter or '下一章' not in next_chapter:
+            soup_full = BeautifulSoup(html, 'html5lib')
+            prev_a = soup_full.select('a#prev_url')
+            next_a = soup_full.select('a#next_url')
+            if '上一章' not in next_chapter and prev_a:
+                href = prev_a[0].get('href') or ''
+                if href and not href.startswith('#') and not href.lower().startswith('javascript'):
+                    link_url = urljoin(chapter_url, href)
+                    next_chapter['上一章'] = link_url
+            if '下一章' not in next_chapter and next_a:
+                href = next_a[0].get('href') or ''
+                if href and not href.startswith('#') and not href.lower().startswith('javascript'):
+                    link_url = urljoin(chapter_url, href)
+                    next_chapter['下一章'] = link_url
+
         return next_chapter
     except Exception as e:
         LOGGER.exception(e)

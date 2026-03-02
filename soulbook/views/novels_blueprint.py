@@ -31,7 +31,7 @@ def close_connection(novels_bp, loop):
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.novels_blueprint', '../templates/novels'),
+    loader=PackageLoader('soulbook', 'templates/novels'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 
@@ -78,6 +78,18 @@ async def donate(request):
 @novels_bp.route("/owllook_feedback")
 async def feedback(request):
     return template('feedback.html')
+
+
+@novels_bp.route("/specify_book")
+async def specify_book(request):
+    """
+    添加书籍页面：输入书籍名和目录地址，跳转到目录页加载。
+    """
+    user = request['session'].get('user', None)
+    return template('specify_book.html',
+                    title='添加书籍 - SoulBook',
+                    is_login=1 if user else 0,
+                    user=user or '')
 
 
 @novels_bp.route("/")

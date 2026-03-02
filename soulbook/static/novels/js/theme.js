@@ -49,7 +49,8 @@ $(document).ready(function () {
 	var bg_target = $("body");
 	var target = $("body > div.container.all-content");
 	var setting = $("body > div.container.all-content > div.left-bar-list > div:nth-child(2)");
-	var content = $($(".show-content").children("*").get(0));
+    // Use our inner reader container to avoid external inline styles interfering
+    var content = $(".reader-content");
 	$("body").append('<div id="helper"><div class="theme"><div class="color mise"' +
 		' theme-data="mise"></div><div class="color maihuang" theme-data="maihuang"></div><div' +
 		' class="color yaqing" theme-data="yaqing"></div><div class="color hulan"' +

@@ -27,7 +27,7 @@ def close_connection(admin_bp, loop):
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.novels_blueprint', '../templates/novels'),
+    loader=PackageLoader('soulbook', 'templates/novels'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 

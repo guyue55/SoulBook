@@ -36,7 +36,7 @@ def close_connection(operate_bp, loop):
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('soulbook.views.operate_blueprint', '../templates/operate'),
+    loader=PackageLoader('soulbook', 'templates/operate'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 
@@ -328,11 +328,6 @@ async def owllook_login(request):
             password = hashlib.md5(pass_first.encode("utf-8")).hexdigest()
             if password == data.get('password'):
                 response = json({'status': 1})
-                # 将session_id存于cokies
-                date = datetime.datetime.now()
-                response.cookies['owl_sid'] = request['session'].sid
-                response.cookies['owl_sid']['expires'] = date + datetime.timedelta(days=30)
-                response.cookies['owl_sid']['httponly'] = True
                 # 此处设置存于服务器session的user值
                 request['session']['user'] = user
                 # response.cookies['user'] = user

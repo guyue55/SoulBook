@@ -2,6 +2,7 @@
 import aiocache
 import os
 import sys
+import logging
 
 from sanic import Sanic
 from sanic.response import html, redirect
@@ -24,6 +25,9 @@ app.blueprint(api_bp)
 
 @app.listener('before_server_start')
 def init_cache(app, loop):
+    # 设置asyncio和asyncio_redis日志级别，减少警告和连接日志
+    logging.getLogger('asyncio').setLevel(logging.WARNING)
+    logging.getLogger('asyncio_redis').setLevel(logging.WARNING)
     LOGGER.info("Starting aiocache")
     app.config.from_object(CONFIG)
     REDIS_DICT = CONFIG.REDIS_DICT
@@ -51,7 +55,12 @@ async def add_session_to_request(request):
     host = request.headers.get('host', None)
     user_agent = request.headers.get('user-agent', None)
     if user_agent:
+        # 尝试多种方式获取用户IP
         user_ip = request.headers.get('X-Forwarded-For')
+        if not user_ip:
+            user_ip = request.headers.get('X-Real-IP')
+        if not user_ip:
+            user_ip = request.ip
         LOGGER.info('user ip is: {}'.format(user_ip))
         if user_ip in CONFIG.FORBIDDEN:
             return html("<h3>网站正在维护...</h3>")
@@ -59,7 +68,13 @@ async def add_session_to_request(request):
             if not host or host not in CONFIG.HOST:
                 return redirect('http://www.owllook.net')
         if CONFIG.WEBSITE['IS_RUNNING']:
-            await app.session_interface.open(request)
+            # Gracefully handle missing Redis in dev/preview environments
+            try:
+                await app.session_interface.open(request)
+            except Exception as e:
+                LOGGER.error('Session open failed: {}'.format(e))
+                # Ensure a session dict exists even if open failed
+                request['session'] = request.get('session', {})
         else:
             return html("<h3>网站正在维护...</h3>")
     else:
@@ -71,11 +86,14 @@ async def save_session(request, response):
     # after each request save the session,
     # pass the response to set client cookies
     # await app.session_interface.save(request, response)
-    if request.path == '/operate/login' and request['session'].get('user', None):
-        await app.session_interface.save(request, response)
-        import datetime
-        response.cookies['owl_sid']['expires'] = datetime.datetime.now(
-        ) + datetime.timedelta(days=30)
+    if request.path == '/operate/login' and request.get('session') and request['session'].get('user', None):
+        try:
+            await app.session_interface.save(request, response)
+            import datetime
+            response.cookies['owl_sid']['expires'] = datetime.datetime.now(
+            ) + datetime.timedelta(days=30)
+        except Exception as e:
+            LOGGER.error('Session save failed: {}'.format(e))
     elif request.path == '/register':
         try:
             response.cookies['reg_index'] = str(request['session']['index'][0])
